@@ -1,0 +1,57 @@
+<h1>Список компаний</h1>
+<button type="button" onclick="loadXLS()">Загрузить</button>
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Название компании</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @listCompanies.each do |company| %>
+    <tr>
+      <th scope="row"><%= company['id'] %></th>
+      <td><%= company['name'] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<script>
+    let inputFile = document.createElement('input');
+    inputFile.type = 'file';
+
+    inputFile.onchange = e => {
+
+        // getting a hold of the file reference
+        let file = e.target.files[0];
+        if (file != undefined) {
+            let fileName = file.name;
+            if (! fileName.match(/.xls$/)) {
+                alert("Расширение файла не XLS");
+                return;
+            }
+
+            let formData = new FormData;
+            formData.append('file', file)
+
+            let csrfToken = document.getElementsByName('csrf-token')[0].content;
+            let xhr = new XMLHttpRequest();
+
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    window.location.href = '<%= home_path %>';
+                }
+            };
+
+            xhr.open("POST", "companies/load_xls");
+            xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+            xhr.send(formData);
+        }
+
+    }
+
+    function loadXLS() {
+        inputFile.click()
+    }
+</script>

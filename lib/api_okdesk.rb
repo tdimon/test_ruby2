@@ -1,15 +1,16 @@
+class TypeRequest
+  Get = 1
+  Post = 2
+end
+
 class ApiOkdesk
   require 'net/http'
-  require 'app/models/api_setting'
+  require 'api_setting'
 
   def initialize
     super
     @recordSet = ApiSetting.first
   end
-
-  enum {
-    Get = 1, Post = 2
-  }
 
   private def getAccount
     return @recordSet.account
@@ -19,20 +20,22 @@ class ApiOkdesk
     return @recordSet.token
   end
 
-  private def sendRequest(uriStr = '', params = {}, typeRequest = Get)
+  private def sendRequest(uriStr = '', params = {}, typeRequest = TypeRequest::Get)
     account = getAccount
     token = getToken
+    params[:api_token] = token
 
-    uri = URI.parse('https://#{account}.testokdesk.ru/api/v1/#{uriStr}?api_token=#{token}')
+    uri = URI.parse("https://#{account}.testokdesk.ru/api/v1/#{uriStr}")
 
     response = ''
 
     case typeRequest
-    when Get
+    when TypeRequest::Get
       uri.query = URI.encode_www_form(params)
       response = Net::HTTP.get(uri)
-    when Post
+    when TypeRequest::Post
       response = Net::HTTP.post_form(uri, params)
+      return uri
     end
 
     return response
@@ -40,10 +43,19 @@ class ApiOkdesk
 
   def getListCompanies
     response = sendRequest('companies/list')
-    return response
+    return JSON.parse(response)
   end
 
-  def createCompanies(listCompanies)
+  def createCompanies(arrNamesCompanies)
+    listCompanies = getListCompanies
+    result = listCompanies.map { |el| el['name']}
+    newNames = arrNamesCompanies - result
 
+    params = {}
+
+    newNames.each { |nameCompany|
+      params[:name] = nameCompany
+      sendRequest('companies', params, TypeRequest::Post)
+    }
   end
 end
