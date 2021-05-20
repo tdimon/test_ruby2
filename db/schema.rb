@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_19_113208) do
+ActiveRecord::Schema.define(version: 2021_05_20_054310) do
+
+  create_table "api_settings", force: :cascade do |t|
+    t.string "account", null: false
+    t.string "token", null: false
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "models", force: :cascade do |t|
     t.string "email", default: "", null: false

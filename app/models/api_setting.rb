@@ -1,0 +1,2 @@
+class ApiSetting < ApplicationRecord
+end

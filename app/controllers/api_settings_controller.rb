@@ -1,0 +1,2 @@
+class ApiSettingsController < ApplicationController
+end
