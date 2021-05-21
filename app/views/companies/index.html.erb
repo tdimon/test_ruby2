@@ -1,3 +1,6 @@
+<nav class="navbar">
+  <%= link_to "Настройки API", api_settings_url + '/show', :class => "navbar-brand ml-auto" %>
+</nav>
 <h1>Список компаний</h1>
 <button type="button" onclick="loadXLS()">Загрузить</button>
 <table class="table">
@@ -27,7 +30,7 @@
         let file = e.target.files[0];
         if (file != undefined) {
             let fileName = file.name;
-            if (! fileName.match(/.xls$/)) {
+            if (!fileName.match(/.xls$/)) {
                 alert("Расширение файла не XLS");
                 return;
             }
@@ -38,7 +41,7 @@
             let csrfToken = document.getElementsByName('csrf-token')[0].content;
             let xhr = new XMLHttpRequest();
 
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.status == 200) {
                     window.location.href = '<%= home_path %>';
                 }

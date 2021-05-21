@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root 'companies#index', as: 'home'
   get '/companies', to: 'companies#index'
   post '/companies/load_xls', to: 'companies#load_xls'
+  resources :api_settings
 end

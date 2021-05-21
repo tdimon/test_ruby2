@@ -23,9 +23,9 @@ class ApiOkdesk
   private def sendRequest(uriStr = '', params = {}, typeRequest = TypeRequest::Get)
     account = getAccount
     token = getToken
-    params[:api_token] = token
 
     uri = URI.parse("https://#{account}.testokdesk.ru/api/v1/#{uriStr}")
+    params[:api_token] = token
 
     response = ''
 
@@ -34,8 +34,12 @@ class ApiOkdesk
       uri.query = URI.encode_www_form(params)
       response = Net::HTTP.get(uri)
     when TypeRequest::Post
-      response = Net::HTTP.post_form(uri, params)
-      return uri
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      request = Net::HTTP::Post.new(uri.path, {'Content-Type' => 'application/json'})
+      request.body = params.to_json
+
+      response = http.request(request)
     end
 
     return response
@@ -51,11 +55,9 @@ class ApiOkdesk
     result = listCompanies.map { |el| el['name']}
     newNames = arrNamesCompanies - result
 
-    params = {}
-
     newNames.each { |nameCompany|
-      params[:name] = nameCompany
-      sendRequest('companies', params, TypeRequest::Post)
+      param = {company: {name: nameCompany}}
+      sendRequest('companies', param, TypeRequest::Post)
     }
   end
 end

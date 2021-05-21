@@ -1,0 +1,11 @@
+<nav class="navbar">
+  <%= link_to "Главная страница", home_path, :class => "navbar-brand ml-auto" %>
+</nav>
+<h1>Настройки Api</h1>
+<p>
+  Аккаунт -  <%= @apiSet.account %>
+</p>
+<p>
+  Токен - <%= @apiSet.token %>
+</p>
+<%= link_to "Редактировать", edit_api_setting_path(@apiSet), :class => "btn btn-success" %>

@@ -1,0 +1,25 @@
+<nav class="navbar">
+  <%= link_to "Главная страница", home_path, :class => "navbar-brand ml-auto" %>
+</nav>
+<h1>Редактирование параметров API</h1>
+<% flash.each do |key, message| %>
+  <div class="alert alert-danger"><%= message %></div>
+<% end %>
+<%= form_for @apiSet, url: api_setting_path(@apiSet), method: :patch do |f| %>
+  <% if @apiSet.errors.any? %>
+    <% @apiSet.errors.full_message.each do |msg| %>
+      <div class="alert alert-danger"><%= msg %></div>
+    <% end %>
+  <% end %>
+  <p>
+    Аккаунт<br>
+    <%= f.text_field(:account, {:class => 'form-control'}) %>
+  </p>
+  <p>
+    Токен<br>
+    <%= f.text_field(:token, {:class => 'form-control'}) %>
+  </p>
+  <p>
+    <%= f.submit({:class => 'btn btn-success'}) %>
+  </p>
+<% end %>
