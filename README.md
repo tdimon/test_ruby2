@@ -1,24 +1,42 @@
-# README
+# Тестовое задание
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Выполняются все этапы из корневой папки проекта
 
-Things you may want to cover:
+## Установка зависимостей
 
-* Ruby version
+Выполнить команду
 
-* System dependencies
+```sh
+bundle install
+```
 
-* Configuration
+## Миграция
 
-* Database creation
+Выполнить миграцию
 
-* Database initialization
+```sh
+rails db:migrate
+```
 
-* How to run the test suite
+## Для теста
 
-* Services (job queues, cache servers, search engines, etc.)
+Выполнить разово команду
 
-* Deployment instructions
+```sh
+rake db:test:prepare
+```
+Для проведения тестирования 
 
-* ...
+```sh
+rspec
+```
+
+## Запуск сервера
+Для запуска
+
+```sh
+rails server
+```
+
+## Дополнительная информация
+Со стороны клиента поддерживается загрузка файла с расширением xls. Из файла загружается список компаний. Модель содержит только name и id. Поэтому достаточно в excel заполнить только первую колонку, указывая название организации.
